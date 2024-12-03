@@ -34,6 +34,7 @@ async function getData(segment) { // async - это ключевое слово 
     const response = await fetch(`https://jsonplaceholder.typicode.com${segment}`) // fetch — это встроенная функция JavaScript для выполнения HTTP-запросов
     if (response.ok) { // response.ok — это булевое значение, которое показывает, был ли запрос успешным
       const data = await response.json() // Преобразование ответ в JSON; await - ожидает завершения выполнения асинхронной операции
+      console.log('Data received:', data)
       return data // Возвращение данных
     } else { //  Обрабатывает ошибки, связанные с неправильными ответами от сервера (например, 404, 500)
       console.error(`HTTP Error: ${response.status}`) // Логирование ошибки HTTP
@@ -45,23 +46,8 @@ async function getData(segment) { // async - это ключевое слово 
   }
 }
 
-// Получение списка постов
 getData('/posts')
-  .then(function(result) {
-    console.log('List of posts:', result)
-  })
-  .catch(function(error) {
-    console.error('Error while fetching the list of posts:', error)
-  });
-
-// Получение одного поста с id=1
 getData('/posts/1')
-  .then(function(result) {
-    console.log('Post with ID=1:', result)
-  })
-  .catch(function(error) {
-    console.error('Error while fetching the post:', error)
-  })
 
 /*
  *
@@ -100,6 +86,7 @@ async function postData(segment, data) {
     })
     if (response.ok) {
       const responseData = await response.json()  
+      console.log('Created Post:', responseData)
       return responseData
     } else {
       console.error(`HTTP Error: ${response.status}`)
@@ -118,12 +105,6 @@ const newPost = {
 }
 
 postData('/posts', newPost)
-  .then(function(result) {
-    console.log('Created Post:', result)
-  })
-  .catch(function(error) {
-    console.error('Error while creating the post:', error)
-  })
 
 /*
  *
@@ -162,6 +143,7 @@ async function putData(id, data) {
     })
     if (response.ok) {
       const responseData = await response.json()
+      console.log('Updated Post:', responseData)
       return responseData
     } else {
       console.error(`HTTP Error: ${response.status}`)
@@ -180,12 +162,6 @@ const updatedPost = {
 }
 
 putData(1, updatedPost)
-  .then(function(result) {
-    console.log('Updated Post:', result)
-  })
-  .catch(function(error) {
-    console.error('Error while updating the post:', error)
-  })
 
 /*
  *
@@ -224,6 +200,7 @@ async function patchData(id, data) {
     })
     if (response.ok) {
       const responseData = await response.json()
+      console.log('Partially Updated Post:', responseData)
       return responseData
     } else {
       console.error(`HTTP Error: ${response.status}`)
@@ -235,18 +212,13 @@ async function patchData(id, data) {
   }
 }
 
-const partialUpdatedPost = {
+const partiallyUpdatedPost = {
   title: 'Partially Updated Title',
-  body: 'This is the partially updated body content.',
+  body: 'This is partially updated body content.',
 }
 
-patchData(1, partialUpdatedPost)
-  .then(function(result) {
-    console.log('Partially Updated Post:', result)
-  })
-  .catch(function(error) {
-    console.error('Error while partially updating the post:', error)
-  })
+patchData(1, partiallyUpdatedPost)
+
 
 /*
  *
@@ -287,7 +259,8 @@ async function deleteData(id) {
       method: 'DELETE',
     })
     if (response.ok) {
-      return `Post with id ${id} has been successfully deleted.`
+      console.log(`Post with id ${id} has been successfully deleted.`)
+      return true
     } else {
       console.error(`Failed to delete post with id ${id}. Status: ${response.status}`)
       return `Status: ${response.status}`
@@ -299,9 +272,3 @@ async function deleteData(id) {
 }
 
 deleteData(1)
-  .then(function(result) {
-    console.log('Operation result:', result)
-  })
-  .catch(function(error) {
-    console.error('Error during the deletion:', error)
-  })
